@@ -1,0 +1,220 @@
+# Radiant Logic IDDM SDK - Minimal Guide for Data Connector Development
+
+## Core API Explained
+
+The minimum requirements for implementing a custom connector are:
+
+- Apply the `@CustomConnector` annotation to the custom connector class.
+- Define a JSON file specifying details of how to display and configure the connector
+- Implement at least one Java interface that specifies which LDAP operations the connector supports.
+
+
+@CustomConnector(metaJsonFile = "derbySqlConnector.json")
+public class DerbySqlCustomConnector implements ReadOperations<SearchRequest> {
+  /* ...provide connector implementation... */
+}
+
+The `@CustomConnector` annotation enables IDDM to identify the connector without requiring special naming conventions or package structures.
+
+## LDAP Operation Interfaces
+
+The LDAP operation interfaces specify exactly which LDAP operations the connector supports:
+
+- `ReadOperations<T extends Request>` - for search/read operations
+- `CreateOperations<T extends Request>` - for create/add operations
+- `ModifyOperations<T extends Request>` - for update/modify operations
+- `DeleteOperations<T extends Request>` - for delete operations
+
+Each interface accepts an incoming request and returns a response. The SDK includes `Request` implementations for common LDAP operations:
+
+- `SearchRequest` - for LDAP search operations
+- `ModifyRequest` - for LDAP modify operations
+- `AddRequest` - for LDAP add operations
+- `DeleteRequest` - for LDAP delete operations
+
+## Request and Response Framework
+
+`Request` and `Response` are marker interfaces. Connectors return responses as `ResponseEntity<T>` objects:
+
+
+@Override
+public ResponseEntity<?> search(SearchRequest searchRequest) {
+  // Do work to process the request, getting data from the backend
+  List<Object> searchResults = getDataFromCustomDatasource(searchRequest);
+  return new ResponseEntity<>(ResponseStatus.OK, searchResults);
+}
+
+
+## Property Injection with @Properties
+
+Custom configuration settings are declared in the JSON resource file's `meta` attribute. The developer requests configuration data at runtime using the `@Properties` annotation:
+
+
+@CustomConnector
+public class DerbySqlCustomConnector implements ReadOperations<SearchRequest> {
+
+  public DerbySqlCustomConnector(
+      @Properties(name = CONNECTION_CONFIGURATION) ConnectionConfiguration connectionConfig,
+      @Properties(name = SCHEMA) SchemaCollection schemas,
+      @Properties(name = NAMING_CONTEXT) NamingContextProperties namingContext)
+  {
+    /* ...do work... */
+  }
+}
+
+
+Available property sets:
+- `CONNECTION_CONFIGURATION` - provides details for connecting to the custom data source
+
+
+## TypeConverter Interface
+
+The `TypeConverter<FROM,TO>` interface encourages isolating the work of converting between different request and response types:
+
+
+public abstract class TypeConverter<FROM, TO> {
+  public abstract TO convert(FROM source);
+}
+
+
+Register type converters with the `@CustomConnector` annotation:
+
+
+@CustomConnector(metaJsonFile = "derbySqlConnector.json", typeConverters = {LdapRequestAdapter.class})
+public class DerbySqlCustomConnector implements ReadOperations<SQLSelectRequest> {
+  /* ...class implementation... */
+}
+
+
+### `@ManagedComponent` Annotation
+
+The `@ManagedComponent` annotation encourages clean coding practices and eases the use of test-double by adding some
+limited support for constructor-based dependency injection. The annotation is applied to classes that IDDM should
+automatically instantiate and inject. This will most often be classes that exist outside the SDK such as custom data
+source clients.
+
+To be eligible for annotation, the class must:
+
+- Have only one constructor
+- Have a no-arg constructor, _or_ all arguments must be either annotated with`@Properties` or types annotated with
+  `@ManagedComponent`.
+
+The example below annotates a `SqlClient` class as a managed component. The class has only one constructor and it
+expects a `ConnectionConfiguration` (which is also a managed component):
+
+
+
+@ManagedComponent
+public class SqlClient {
+
+  private final ConnectionConfiguration connectionConfig;
+
+  public SqlClient(final ConnectionConfiguration connectionConfig) {
+    this.connectionConfig = connectionConfig;
+  }
+}
+
+
+
+## JSON Connector Configuration
+
+A JSON file is required that describes the connector for IDDM loading:
+
+
+{
+  "name": "My Custom Connector",
+  "description": "Connector for custom data source",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "path/to/icon.png",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "hostname",
+      "description": "Hostname of the data source",
+      "sectionName": "Connection",
+      "defaultValue": "localhost",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^[a-zA-Z0-9.-]+$"
+    }
+  ]
+}
+
+
+## Package and Class Naming Conventions
+
+- **Package**: `com.radiantlogic.custom.dataconnector.{objectname}api`
+- **Class**: `{ObjectName}DataConnector` (e.g., `BooksDataConnector`)
+- **Test Class**: `{ObjectName}DataConnectorTest` (e.g., `BooksDataConnectorTest`)
+
+## Testing Framework
+
+Use JUnit 5 and Mockito for unit testing:
+
+
+@ExtendWith(MockitoExtension.class)
+class BooksDataConnectorTest {
+    
+    @Mock
+    private BooksApi booksApi;
+    
+    @InjectMocks
+    private BooksDataConnector dataConnector;
+    
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+    
+    @Test
+    void testSearch() {
+        // Test implementation
+    }
+}
+
+
+## Build Requirements
+
+- **Java 8 compatibility**: Required for IDDM plugins
+- **Fat JAR creation**: Using `maven-assembly-plugin` with `jar-with-dependencies`
+- **Resource inclusion**: JSON metadata files must be included in the JAR
+
+## SDK Component Summary
+
+| Component                | Description                                                                                                     |
+|--------------------------|-----------------------------------------------------------------------------------------------------------------|
+| `@CustomConnector`       | Annotation applied to the primary connector class, used by IDDM to identify the connector                       |
+| `ReadOperations<T>`      | Interface for connectors that support read/search operations                                                    |
+| `CreateOperations<T>`    | Interface for connectors that support create/add operations                                                     |
+| `ModifyOperations<T>`    | Interface for connectors that support update/modify operations                                                  |
+| `DeleteOperations<T>`    | Interface for connectors that support delete operations                                                         |
+| `@Properties`            | Annotation for injecting configuration data from IDDM                                                          |
+| `Request`                | Marker interface for data types passed from IDDM to the connector                                              |
+| `Response`               | Marker interface for data types returned from the connector to IDDM                                            |
+| `TypeConverter<FROM,TO>` | Abstract class for creating Request and Response converters                                                    |
+| `@ManagedComponent`      | Annotation for automatic constructor-based dependency injection                                                |
+| `ResponseEntity`         | Generic data structure for storing operation result codes and additional data                                  |
+
+## Request Implementations
+
+| `Request`       | Description                                                                                                     |
+|-----------------|-----------------------------------------------------------------------------------------------------------------|
+| `SearchRequest` | Contains information necessary to perform LDAP search operations                                                |
+| `ModifyRequest` | Contains information needed to perform LDAP modify operations                                                   |
+| `AddRequest`    | Contains information needed to perform LDAP add operations                                                      |
+| `DeleteRequest` | Contains information needed to perform LDAP delete operations                                                   |
+
+## Response Implementations
+
+| `Response`       | Description                                                                                                     |
+|------------------|-----------------------------------------------------------------------------------------------------------------|
+| `ResponseEntity` | Generic data structure for storing operation result codes and additional data                                  |
+| `LdapResponse`   | Container object for storing LDAP specific result codes and additional data                                    |
+
+## Property Sets
+
+| Name                       | Object                    | Description                                                                                                     |
+|----------------------------|---------------------------|-----------------------------------------------------------------------------------------------------------------|
+| `CONNECTION_CONFIGURATION` | `ConnectionConfiguration` | Provides properties of the custom data source                                                                   |
+                               | 
