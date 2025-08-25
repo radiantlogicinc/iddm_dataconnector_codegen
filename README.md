@@ -19,7 +19,7 @@ iddm_dataconnector_codegen/
 │   ├── mcp_server.py            # Main MCP server with full tooling
 │   └── requirements.txt         # Python dependencies
 ├── examples/                     # Few-shot learning examples
-│   ├── BooksDataConnector.java  # Example Java connector class
+│   ├── HarryPotterDataConnector.java  # Example Java connector class
 │   ├── harrypotterbooksconnector.json # Example JSON configuration
 │   └── HarryPotterDataConnectorTest.java # Example unit tests
 ├── yamlfiles/                   # OpenAPI specifications
