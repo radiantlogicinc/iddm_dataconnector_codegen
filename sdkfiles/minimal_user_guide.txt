@@ -1,0 +1,257 @@
+# Radiant Logic Connector SDK Minimal Developer Guide
+
+## Connector Requirements
+
+The minimum requirements for implementing a custom connector are:
+
+- Apply the @CustomConnector annotation to a class to identify it as the connector.
+- Implement at least one operation interface to specify what operations the connector supports.
+- Define a JSON file specifying details of how to display and configure the connector.
+
+
+@CustomConnector(metaJsonFile = "pennave_connector.json")
+public class PennAveConnector
+    implements SearchOperations<LdapSearchRequest, LdapResponse<String>> {
+  /* ...provide connector implementation... */
+}
+
+
+## Operation Interfaces
+
+Operation interfaces are implemented by the connector and specify exactly what operations the connector supports. There are interfaces for common LDAP operations:
+ 
+- SearchOperations<IN extends SearchRequest, OUT extends Response>
+- CreateOperations<IN extends CreateRequest, OUT extends Response>
+- ModifyOperations<IN extends ModifyRequest, OUT extends Response>
+- DeleteOperations<IN extends DeleteRequest, OUT extends Response>
+- AuthenticationOperations<IN extends AuthenticationRequest, OUT extends Response>
+
+And additional interfaces for IDDM-specific operations:  
+ 
+- TestConnectionOperations<IN extends TestConnectionRequest, OUT extends TestConnectionResponse>
+
+The connector should implement interfaces only for the operations it supports. IDDM uses this information to determine what types of requests can be sent to the connector.
+
+## Request and Response Types
+
+Each operation interface includes type arguments specifying the request (input) and response (output) types it expects. There are Java interfaces for implementing custom types, but most users will find it much easier to use the concrete type implementations provided in the SDK. The table below shows the recommend input and output types for each operation interface. (These recommendations are based on what IDDM actually sends to the connector and expects in return.) 
+
+| Operation Interface         | Request Type           | Response Type                           |
+|-----------------------------|------------------------|-----------------------------------------|
+|  SearchOperations          | LdapSearchRequest    | LdapResponse                          |
+| CreateOperations          | LdapAddRequest       | LdapResponse                          |
+| ModifyOperations          | LdapModifyRequest    | LdapResponse                          |
+| DeleteOperations          | LdapDeleteRequest    | LdapResponse                          |
+| AuthenticationOperations  | LdapBindRequest      | LdapResponse                          |
+| TestConnectionOperations  | TestConnectionRequest| TestConnectionResponse                |
+
+Most operations return an LdapResponse<T>. This is a flexible container class for representing an LDAP response that can be returned to IDDM. It includes an LdapResultCode and data appropriate for the response, such as search results. The data is not required to follow any specific structure. But users will find connector development and integration easier if the data can be serialized to a flat JSON object. (The connector does not need to actually perform this serialization. It is simply guidance.)
+
+The example below is for a connector that supports search, accepts the incoming request as an LdapSearchRequest object, and returns its response to IDDM as an LdapResponse containing String data.
+
+
+@Override
+public LdapResponse<String> search(LdapSearchRequest searchRequest) {
+  // Do work to process the request, getting data from the backend
+  String searchResults = getDataFromCustomDatasource(searchRequest);
+  return new LdapResponse<>(LdapResultCode.SUCCESS, searchResults);
+}
+
+
+## Property Injection With @Properties
+
+The @Property annotation enables users to request system configuration information at runtime. IDDM provides the requested information in a ReadOnlyProperties object. The @Property annotation can be applied to only ReadOnlyProperties constructor parameters appearing in @ManagedComponent and @CustomConnector annotated classes. 
+
+
+@CustomConnector(metaJsonFile = "pennave_connector.json")
+public class PennAveConnector implements SearchOperations<LdapSearchRequest, LdapResponse<String>> { 
+  
+  private final String host;
+  private final String username;
+  private final String password;
+  
+  public PennAveConnector(@Property(name = CUSTOM_DATASOURCE_PROPERTIES) ReadOnlyProperties connectionProperties) {
+    // Read values from the injected property set
+    this.host = (String) connectionProperties.get("host");
+    this.username = (String) connectionProperties.get("username");
+    this.password = (String) connectionProperties.get("password");
+  }
+  
+}
+
+
+Most users will include the InjectableProperties.CONNECTION_CONFIGURATION, as shown above, to retrieve information needed for connecting to their third-party, external datasource. A complete list of available properties is defined in InjectableProperties.
+
+## Dependency Injection With @ManagedComponent
+
+Applying the @ManagedComponent annotation to a class indicates that class is a "managed component" and makes it eligible for automatic constructor-based injection. Managed components are automatically instantiated and injected by IDDM whenever they appear as constructor parameters for connectors and other managed components. The annotated class must have (1) only one constructor, and (2) that constructor must have either no arguments or all arguments must be annotated with @Properties or @ManagedComponent. 
+
+A typical use case is annotating a custom client that communicates with an external data source. For example:
+
+
+@ManagedComponent
+public class PennAveClient {
+  public PennAveClient(
+      @Property(name = CUSTOM_DATASOURCE_PROPERTIES) ReadOnlyProperties connectionProperties) {
+  
+  }
+}
+
+
+IDDM can now automatically create and inject a new PennAveClient instance whenever it appears as a constructor argument in a connector or managed component:
+
+
+@CustomConnector(metaJsonFile = "pennave_connector.json")
+public class PennAveConnector implements SearchOperations<LdapSearchRequest, LdapResponse<String>> { 
+  
+  private final PennAveClient pennAveClient;
+  
+  public PennAveConnector(final PennAveClient injectedClient) {
+    this.pennAveClient = injectedClient;
+  }
+  ...
+}
+
+
+## Connector JSON Description
+
+All connectors must include a JSON file describing the connector. For example: 
+
+{
+  "name": "PennAveIAM",
+  "description": "PennAveIAM custom connector used for simple testing",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "host",
+      "description": null,
+      "sectionName": "Properties",
+      "defaultValue": null,
+      "dataType": "STRING",
+      "isRequired": false,
+      "regex": null
+    },
+    ...
+  ]
+}
+
+
+The JSON file and connector are linked using the @CustomConnector metaJsonFile parameter. (See previous examples.)
+
+Top-level properties (except meta) describe the connector. Connectors must use the values shown in the example above, customizing only the name and description. 
+
+| Property name | Type     | Description                               | 
+|---------------|----------|-------------------------------------------|
+| name          | String | Name of the connector                     |
+| description   | String | Description the connector shown in the UI |
+
+The meta value defines the list properties available via @Property(name=InjectableProperties.CUSTOM_DATASOURCE_PROPERTIES). Each list entry defines a unique property included in the ReadOnlyProperties object injected by IDDM.
+
+| Property name | Type     | Description                                                                  |
+|---------------|----------|------------------------------------------------------------------------------|
+| name          | String | Name to display in the UI; used to get the value from ReadOnlyProperties   |
+| description   | String | Property description shown in the UI                                         |
+| sectionName   | String | Used to group properties in the UI; recommend always using "Properties"      | 
+| defaultValue  | String | Optional default value; use "null" to not specify a default value            |
+| dataType      | String | Allowed case-sensitive values: STRING, PASSWORD, BOOLEAN, NUMBER, LIST       |
+| isRequired    | boolean  | True if users must provide a value in the UI.                                |
+
+
+## Logging
+
+Users can request a Logger instance via dependency injection for writing Log4j-style messages. The logger is automatically injected wherever  Logger appears as constructor parameter in @CustomConnector and @ManagedComponent annotated classes.
+
+java
+@CustomConnector(metaJsonFile = "pennave_connector.json")
+public class PennAveConnector implements SearchOperations<LdapSearchRequest, LdapResponse<String>> { 
+  
+  private final Logger log;
+  
+  public PennAveConnector(Logger logger) {
+    this.log = log;
+  }
+  ...
+}
+
+
+Log files are written to the $RLI_HOME/<instance>/logs/connectors/ directory when the connector is used within an IDDM instance. 
+
+The log-level is configurable by adding a custom property to the JSON metadata file:
+
+
+{ 
+  "name": "loglevel", 
+  "description": "Verbosity level of logging (ERROR, WARN, INFO, DEBUG, TRACE)", 
+  "sectionName": "Logging", 
+  "defaultValue": "INFO", 
+  "dataType": "STRING", 
+  "isRequired": false, 
+  "regex": "^(?:\\d+|(?i)(ERROR|WARN|INFO|DEBUG|TRACE))$" 
+}
+
+
+When unit testing connectors outside IDDM, where dependency injection is not available and the log-level cannot be changed, users should use the TestLogger implementation that prints all messages to the console.
+
+java
+PennAveConnector connector = new PennAveConnector(new TestLogger());
+
+
+## SDK Component Summary
+
+### Annotations
+
+| Component           | Description                                                                                  |
+|---------------------|----------------------------------------------------------------------------------------------|
+| @CustomConnector  | Annotation applied to the primary connector class and used by IDDM to identify the connector |
+| @Properties       | Annotation for injecting configuration data from IDDM                                        |
+| @ManagedComponent | Annotation for marking a class as eligible for automatic constructor-based injection         |
+
+
+### Operation Interfaces
+
+| Component                                                                                        | Description                                                          |
+|--------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
+| SearchOperations<IN extends SearchRequest, OUT extends Response>                               | Interface for connectors that support read/search operations         |
+| CreateOperations<IN extends CreateRequest, OUT extends Response>                               | Interface for connectors that support create/add operations          |
+| ModifyOperations<IN extends ModifyRequest, OUT extends Response>                               | Interface for connectors that support update/modify operations       |
+| DeleteOperations<IN extends DeleteRequest, OUT extends Response>                               | Interface for connectors that support delete operations              |
+| AuthenticationOperations<IN extends AuthenticationRequest, OUT extends Response>               | Interface for connectors that support authentication/bind operations |
+| TestConnectionOperations<IN extends TestConnectionRequest, OUT extends TestConnectionResponse> | Interface for connectors that support IDDM's test connection feature |
+
+
+### Request Implementations
+
+| Request               | Description                                                              |
+|-------------------------|--------------------------------------------------------------------------|
+| LdapSearchRequest     | Implements an LDAP "Search Request" based on RFC 4511.                   |
+| LdapModifyRequest     | Implements an LDAP "Modify Request" based on RFC 4511.                   |
+| LdapAddRequest        | Implements an LDAP "Add Request" based on RFC 4511.                      |
+| LdapDeleteRequest     | Implements an LDAP "Delete Request" based on RFC 4511.                   |
+| LdapBindRequest       | Implements an LDAP "Bind Request" based on RFC 4511.                     |
+| TestConnectionRequest | Describes a request to test the connection to a URI-identified resource. |
+
+
+### Response Implementations
+
+| Response               | Description                                                                     |
+|--------------------------|---------------------------------------------------------------------------------|
+| LdapResponse<T>        | Represents an LDAP response containing operation status and any associated data |
+| TestConnectionResponse | Represents the result of a test connection operation                            |
+
+### Property Sets
+
+| Name                       | Object                    | Description                                                        |
+|----------------------------|---------------------------|--------------------------------------------------------------------|
+| CONNECTION_CONFIGURATION   | ConnectionConfiguration   | Provides properties of the custom data source                      |
+| NAMING_CONTEXT             | NamingContextProperties   | Provides basic properties about the naming context (e.g., root DN) |
+
+
+ ### Logging
+ 
+| Component    | Description                                              |
+|--------------|----------------------------------------------------------|
+| Logger       | Interface for logging messages from connectors           |
+| TestLogger   | Concrete Logger implementation for use in unit testing   |

@@ -1,0 +1,8 @@
+package com.radiantlogic.openapi.generated.harrypotterapi.invoker;
+
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class JacksonConfig {
+    public static ObjectMapper OBJECT_MAPPER = Jackson2ObjectMapperBuilder.json().build();
+}
