@@ -37,6 +37,35 @@ warnings.filterwarnings("ignore")
 debug_logger = logging.getLogger('enhanced_mcp_server')
 debug_logger.info('=== COMPLETE ENHANCED MCP DATA CONNECTOR SERVER EXECUTED ===')
 
+def load_env_file(file_path: str) -> Dict[str, str]:
+    """Load environment variables from a specific .env file."""
+    env_vars = {}
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    # Remove quotes if present
+                    value = value.strip('"\'')
+                    env_vars[key] = value
+    return env_vars
+
+def get_env_config():
+    """Load configuration from environment files."""
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    application_folder = os.path.dirname(script_dir)
+
+    # Load environment files
+    env_file = os.path.join('../', application_folder, 'fastworkflow.env')
+    passwords_file = os.path.join('../', application_folder, 'fastworkflow.passwords.env')
+
+    env_vars = load_env_file(env_file)
+    password_vars = load_env_file(passwords_file)
+
+    return {**env_vars, **password_vars}
+
 # Add user library to path for MCP modules
 user_lib_path = '/Users/Ragiv1/Library/Python/3.12/lib/python/site-packages'
 if user_lib_path not in sys.path:
@@ -1237,9 +1266,18 @@ def generate_data_connector_code(
         
         # Configure the LLM for DSPy
         debug_log("Configuring LLM...")
+        
+        # Load configuration from environment files
+        config = get_env_config()
+        llm_model = config.get('LLM_CODEGEN', 'gemini/gemini-2.5-pro')
+        api_key = config.get('API_KEY_CODEGENLLM', '')
+        
+        if not api_key:
+            raise ValueError("API_KEY_CODEGENLLM not found in environment files")
+        
         lm = dspy.LM(
-            "gemini/gemini-2.0-flash-lite-preview-02-05",
-            api_key="AIzaSyBUiSvLY7dfJnqvwZc4-wh1OPIzzz7ZJ_8",
+            llm_model,
+            api_key=api_key,
         )     
         dspy.configure(lm=lm)
         debug_log("LLM configured successfully")

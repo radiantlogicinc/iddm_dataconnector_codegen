@@ -1,8 +1,8 @@
-fastworkflow
+fastworkflow==2.15.12
 ruamel.yaml 
 dspy-ai
 mlflow
-openai
+openai==1.99.9
 fastmcp
 requests
 pathlib 

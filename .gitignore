@@ -205,3 +205,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+___workflow_contexts/
+Api_code/
+data_connector_fastworkflow/___command_info/
+data_connector_fastworkflow/fastworkflow.passwords.env
+action.json
