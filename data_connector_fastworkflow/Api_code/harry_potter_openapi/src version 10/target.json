@@ -1,0 +1,39 @@
+{
+  "objects": {
+    "houses": {
+      "methods": {
+        "/houses": {
+          "verb": "get",
+          "operation": "get__houses",
+          "tags": [
+            "Houses"
+          ],
+          "description": "Returns the four Hogwarts Houses with some extra data",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/indexParam"
+            },
+            {
+              "$ref": "#/components/parameters/maxParam"
+            },
+            {
+              "$ref": "#/components/parameters/pageParam"
+            },
+            {
+              "$ref": "#/components/parameters/searchParam"
+            }
+          ]
+        },
+        "/houses/random": {
+          "verb": "get",
+          "operation": "get__houses_random",
+          "tags": [
+            "Houses"
+          ],
+          "description": "Returns a random Hogwarts House with some extra data.",
+          "parameters": []
+        }
+      }
+    }
+  }
+}

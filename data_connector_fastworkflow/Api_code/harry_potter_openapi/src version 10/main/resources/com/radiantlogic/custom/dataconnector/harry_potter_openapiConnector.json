@@ -1,0 +1,19 @@
+{
+  "name": "Harry Potter OpenAPI Connector",
+  "description": "Unified Data Connector for Harry Potter OpenAPI (houses object)",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "icons/harrypotter.png",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "hostname",
+      "description": "Hostname of the Harry Potter OpenAPI service",
+      "sectionName": "Connection",
+      "defaultValue": "api.harrypotter.com",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^[a-zA-Z0-9.-]+$"
+    }
+  ]
+}

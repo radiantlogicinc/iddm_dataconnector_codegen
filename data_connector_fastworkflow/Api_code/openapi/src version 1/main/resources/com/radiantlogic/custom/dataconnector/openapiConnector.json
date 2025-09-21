@@ -1,0 +1,19 @@
+{
+  "name": "OpenAPI Unified Connector",
+  "description": "Connector handling login, inject_client_cert, authenticate, authn-iam, authn-azure, authn-k8s, authn-ldap, authn-jwt, password, api_key objects",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "icon/openapi.png",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "hostname",
+      "description": "Hostname of the Conjur server",
+      "sectionName": "Connection",
+      "defaultValue": "localhost",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^[a-zA-Z0-9.-]+$"
+    }
+  ]
+}

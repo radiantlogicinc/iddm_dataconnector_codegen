@@ -1,0 +1,28 @@
+{
+  "name": "Harry Potter OpenAPI Connector",
+  "description": "Unified Data Connector for the Harry Potter OpenAPI (characters, spells, houses, books).",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "icons/harry_potter.png",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "hostname",
+      "description": "Base URL of the Harry Potter OpenAPI (e.g., https://api.harrypotter.com)",
+      "sectionName": "Connection",
+      "defaultValue": "https://api.harrypotter.com",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^https?://[a-zA-Z0-9.-]+(:[0-9]+)?(/.*)?$"
+    },
+    {
+      "name": "apiKey",
+      "description": "API key for authenticating to the Harry Potter OpenAPI",
+      "sectionName": "Authentication",
+      "defaultValue": "",
+      "dataType": "STRING",
+      "isRequired": false,
+      "regex": "^[A-Za-z0-9_-]{0,64}$"
+    }
+  ]
+}

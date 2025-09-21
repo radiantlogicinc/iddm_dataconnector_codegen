@@ -1,0 +1,39 @@
+{
+  "objects": {
+    "characters": {
+      "methods": {
+        "/characters": {
+          "verb": "get",
+          "operation": "get__characters",
+          "tags": [
+            "Characters"
+          ],
+          "description": "Returns all Harry Potter characters.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/indexParam"
+            },
+            {
+              "$ref": "#/components/parameters/maxParam"
+            },
+            {
+              "$ref": "#/components/parameters/pageParam"
+            },
+            {
+              "$ref": "#/components/parameters/searchParam"
+            }
+          ]
+        },
+        "/characters/random": {
+          "verb": "get",
+          "operation": "get__characters_random",
+          "tags": [
+            "Characters"
+          ],
+          "description": "Returns a random Harry Potter character.",
+          "parameters": []
+        }
+      }
+    }
+  }
+}

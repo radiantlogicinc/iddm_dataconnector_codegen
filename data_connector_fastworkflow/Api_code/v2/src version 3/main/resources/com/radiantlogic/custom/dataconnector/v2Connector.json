@@ -1,0 +1,19 @@
+{
+  "name": "Atlas v2 Unified Data Connector",
+  "description": "Connector for MongoDB Atlas v2 API handling all unified objects.",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "atlas.png",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "hostname",
+      "description": "Hostname of the Atlas API endpoint",
+      "sectionName": "Connection",
+      "defaultValue": "cloud.mongodb.com",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^[a-zA-Z0-9.-]+$"
+    }
+  ]
+}

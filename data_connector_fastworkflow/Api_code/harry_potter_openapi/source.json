@@ -1,0 +1,142 @@
+{
+  "books": {
+    "methods": {
+      "/books": {
+        "verb": "get",
+        "operation": "get__books",
+        "tags": [
+          "Books"
+        ],
+        "description": "Returns all Harry Potter books.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/indexParam"
+          },
+          {
+            "$ref": "#/components/parameters/maxParam"
+          },
+          {
+            "$ref": "#/components/parameters/pageParam"
+          },
+          {
+            "$ref": "#/components/parameters/searchParam"
+          }
+        ]
+      },
+      "/books/random": {
+        "verb": "get",
+        "operation": "get__books_random",
+        "tags": [
+          "Books"
+        ],
+        "description": "Returns a random Harry Potter book.",
+        "parameters": []
+      }
+    }
+  },
+  "characters": {
+    "methods": {
+      "/characters": {
+        "verb": "get",
+        "operation": "get__characters",
+        "tags": [
+          "Characters"
+        ],
+        "description": "Returns all Harry Potter characters.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/indexParam"
+          },
+          {
+            "$ref": "#/components/parameters/maxParam"
+          },
+          {
+            "$ref": "#/components/parameters/pageParam"
+          },
+          {
+            "$ref": "#/components/parameters/searchParam"
+          }
+        ]
+      },
+      "/characters/random": {
+        "verb": "get",
+        "operation": "get__characters_random",
+        "tags": [
+          "Characters"
+        ],
+        "description": "Returns a random Harry Potter character.",
+        "parameters": []
+      }
+    }
+  },
+  "houses": {
+    "methods": {
+      "/houses": {
+        "verb": "get",
+        "operation": "get__houses",
+        "tags": [
+          "Houses"
+        ],
+        "description": "Returns the four Hogwarts Houses with some extra data",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/indexParam"
+          },
+          {
+            "$ref": "#/components/parameters/maxParam"
+          },
+          {
+            "$ref": "#/components/parameters/pageParam"
+          },
+          {
+            "$ref": "#/components/parameters/searchParam"
+          }
+        ]
+      },
+      "/houses/random": {
+        "verb": "get",
+        "operation": "get__houses_random",
+        "tags": [
+          "Houses"
+        ],
+        "description": "Returns a random Hogwarts House with some extra data.",
+        "parameters": []
+      }
+    }
+  },
+  "spells": {
+    "methods": {
+      "/spells": {
+        "verb": "get",
+        "operation": "get__spells",
+        "tags": [
+          "Spells"
+        ],
+        "description": "Returns all the spells mentioned in the saga with a description.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/indexParam"
+          },
+          {
+            "$ref": "#/components/parameters/maxParam"
+          },
+          {
+            "$ref": "#/components/parameters/pageParam"
+          },
+          {
+            "$ref": "#/components/parameters/searchParam"
+          }
+        ]
+      },
+      "/spells/random": {
+        "verb": "get",
+        "operation": "get__spells_random",
+        "tags": [
+          "Spells"
+        ],
+        "description": "Returns a random spell mentioned in the saga with a description.",
+        "parameters": []
+      }
+    }
+  }
+}

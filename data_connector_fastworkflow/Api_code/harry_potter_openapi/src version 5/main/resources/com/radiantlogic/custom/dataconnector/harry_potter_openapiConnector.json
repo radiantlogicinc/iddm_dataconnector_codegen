@@ -1,0 +1,28 @@
+{
+  "name": "Harry Potter OpenAPI Connector",
+  "description": "Unified connector for Harry Potter books, characters and spells",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "icons/harry_potter.png",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "hostname",
+      "description": "Hostname of the Harry Potter OpenAPI service",
+      "sectionName": "Connection",
+      "defaultValue": "localhost",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^[a-zA-Z0-9.-]+$"
+    },
+    {
+      "name": "apiKey",
+      "description": "API key for authenticating to the OpenAPI",
+      "sectionName": "Connection",
+      "defaultValue": "",
+      "dataType": "STRING",
+      "isRequired": false,
+      "regex": ".*"
+    }
+  ]
+}

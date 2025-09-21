@@ -1,0 +1,4 @@
+{
+  "name": "Sailpoint API IIQ (1) Connector",
+  "description": "Unified connector for Sailpoint API IIQ (1) handling Accounts, Alerts, Applications, CheckedPolicyViolations, Entitlements, LaunchedWorkflows, LaunchedWorkflow, ObjectConfigs, ObjectConfig, and PolicyViolations.",
+  "backendCategory

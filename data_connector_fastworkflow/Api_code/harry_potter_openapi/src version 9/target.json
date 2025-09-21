@@ -1,0 +1,74 @@
+{
+  "objects": {
+    "books": {
+      "methods": {
+        "/books": {
+          "verb": "get",
+          "operation": "get__books",
+          "tags": [
+            "Books"
+          ],
+          "description": "Returns all Harry Potter books.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/indexParam"
+            },
+            {
+              "$ref": "#/components/parameters/maxParam"
+            },
+            {
+              "$ref": "#/components/parameters/pageParam"
+            },
+            {
+              "$ref": "#/components/parameters/searchParam"
+            }
+          ]
+        },
+        "/books/random": {
+          "verb": "get",
+          "operation": "get__books_random",
+          "tags": [
+            "Books"
+          ],
+          "description": "Returns a random Harry Potter book.",
+          "parameters": []
+        }
+      }
+    },
+    "spells": {
+      "methods": {
+        "/spells": {
+          "verb": "get",
+          "operation": "get__spells",
+          "tags": [
+            "Spells"
+          ],
+          "description": "Returns all the spells mentioned in the saga with a description.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/indexParam"
+            },
+            {
+              "$ref": "#/components/parameters/maxParam"
+            },
+            {
+              "$ref": "#/components/parameters/pageParam"
+            },
+            {
+              "$ref": "#/components/parameters/searchParam"
+            }
+          ]
+        },
+        "/spells/random": {
+          "verb": "get",
+          "operation": "get__spells_random",
+          "tags": [
+            "Spells"
+          ],
+          "description": "Returns a random spell mentioned in the saga with a description.",
+          "parameters": []
+        }
+      }
+    }
+  }
+}

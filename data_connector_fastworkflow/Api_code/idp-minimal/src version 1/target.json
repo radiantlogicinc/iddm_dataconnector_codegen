@@ -1,0 +1,223 @@
+{
+  "objects": {
+    "idp": {
+      "methods": {
+        "/idp/myaccount/app-authenticators": {
+          "verb": "post",
+          "operation": "createAppAuthenticatorEnrollment",
+          "tags": [
+            "AppAuthenticator"
+          ],
+          "description": "Creates an app authenticator enrollment",
+          "parameters": []
+        },
+        "/idp/myaccount/app-authenticators/challenge/{challengeId}/verify": {
+          "verb": "post",
+          "operation": "verifyAppAuthenticatorPushNotificationChallenge",
+          "tags": [
+            "AppAuthenticator"
+          ],
+          "description": "Verifies a push notification challenge from the app authenticator",
+          "parameters": []
+        },
+        "/idp/myaccount/app-authenticators/{enrollmentId}": {
+          "verb": "delete",
+          "operation": "deleteAppAuthenticatorEnrollment",
+          "tags": [
+            "AppAuthenticator"
+          ],
+          "description": "Deletes an app authenticator enrollment",
+          "parameters": []
+        },
+        "/idp/myaccount/app-authenticators/{enrollmentId}/push/notifications": {
+          "verb": "get",
+          "operation": "listAppAuthenticatorPendingPushNotificationChallenges",
+          "tags": [
+            "AppAuthenticator"
+          ],
+          "description": "Lists all pending push notification challenges",
+          "parameters": []
+        },
+        "/idp/myaccount/authenticators": {
+          "verb": "get",
+          "operation": "listAuthenticators",
+          "tags": [
+            "Authenticators"
+          ],
+          "description": "Lists all of the authenticators for the current user\n",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/queryExpandAuthenticator"
+            }
+          ]
+        },
+        "/idp/myaccount/authenticators/{authenticatorId}": {
+          "verb": "get",
+          "operation": "getAuthenticator",
+          "tags": [
+            "Authenticators"
+          ],
+          "description": "Retrieves an authenticator by `authenticatorId`\n",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/queryExpandAuthenticator"
+            }
+          ]
+        },
+        "/idp/myaccount/authenticators/{authenticatorId}/enrollments": {
+          "verb": "get",
+          "operation": "listEnrollments",
+          "tags": [
+            "Authenticators"
+          ],
+          "description": "Lists all enrollments the current user has for an authenticator\n",
+          "parameters": []
+        },
+        "/idp/myaccount/authenticators/{authenticatorId}/enrollments/{enrollmentId}": {
+          "verb": "patch",
+          "operation": "updateEnrollment",
+          "tags": [
+            "Authenticators"
+          ],
+          "description": "Updates an authenticator enrollment by `enrollmentId`.\nThe following update operations are allowed:\n* Update the enrollment nickname\n* Remove the enrollment nickname\n",
+          "parameters": []
+        },
+        "/idp/myaccount/emails": {
+          "verb": "post",
+          "operation": "createEmail",
+          "tags": [
+            "Email"
+          ],
+          "description": "Creates a primary or secondary email address for the user's account. The new email address has an `UNVERIFIED` status.\n",
+          "parameters": []
+        },
+        "/idp/myaccount/emails/{id}": {
+          "verb": "delete",
+          "operation": "deleteEmail",
+          "tags": [
+            "Email"
+          ],
+          "description": "Deletes the current user's email information by ID. You can only delete unverified primary and secondary emails.\n",
+          "parameters": []
+        },
+        "/idp/myaccount/emails/{id}/challenge": {
+          "verb": "post",
+          "operation": "sendEmailChallenge",
+          "tags": [
+            "Email"
+          ],
+          "description": "Sends a \\\"Confirm email address change\\\" email to the user with a one-time passcode for verification.\nAlso, the user receives a \\\"Notice of pending email address change\\\" email. After the challenge is verified, the email becomes active.",
+          "parameters": []
+        },
+        "/idp/myaccount/emails/{id}/challenge/{challengeId}": {
+          "verb": "get",
+          "operation": "pollChallengeForEmailMagicLink",
+          "tags": [
+            "Email"
+          ],
+          "description": "Polls for the email challenge's status",
+          "parameters": []
+        },
+        "/idp/myaccount/emails/{id}/challenge/{challengeId}/verify": {
+          "verb": "post",
+          "operation": "verifyEmailOtp",
+          "tags": [
+            "Email"
+          ],
+          "description": "Verifies the email challenge with the code that the user receives from the \\\"Confirm email address change\\\" email. Once verified, the email is active.\n",
+          "parameters": []
+        },
+        "/idp/myaccount/okta-applications": {
+          "verb": "get",
+          "operation": "listOktaApplications",
+          "tags": [
+            "OktaApplications"
+          ],
+          "description": "Lists all of the current user's Okta apps\n",
+          "parameters": []
+        },
+        "/idp/myaccount/organization": {
+          "verb": "get",
+          "operation": "getOrganization",
+          "tags": [
+            "Organization"
+          ],
+          "description": "Retrieves the org details\n",
+          "parameters": []
+        },
+        "/idp/myaccount/password": {
+          "verb": "delete",
+          "operation": "deletePassword",
+          "tags": [
+            "Password"
+          ],
+          "description": "Deletes the current user's enrolled password\n",
+          "parameters": []
+        },
+        "/idp/myaccount/phones": {
+          "verb": "post",
+          "operation": "createPhone",
+          "tags": [
+            "Phone"
+          ],
+          "description": "Creates an `UNVERIFIED` status phone for either the SMS or CALL method to the user's MyAccount setting",
+          "parameters": []
+        },
+        "/idp/myaccount/phones/{id}": {
+          "verb": "delete",
+          "operation": "deletePhone",
+          "tags": [
+            "Phone"
+          ],
+          "description": "Deletes the current user's phone information by ID",
+          "parameters": []
+        },
+        "/idp/myaccount/phones/{id}/challenge": {
+          "verb": "post",
+          "operation": "sendPhoneChallenge",
+          "tags": [
+            "Phone"
+          ],
+          "description": "Sends a phone challenge using one of two methods: `SMS` or `CALL`. This request can also handle a resend challenge (retry).\n\nUpon a successful challenge, the user receives a verification code by `SMS` or `CALL`. Send a `POST` request to the `/idp/myaccount/phones/{id}/verify` endpoint to use the verification code to verify the phone number. The verification code expires in five minutes.\n\n> **Notes:**\n> * Sending requests to the `/idp/myaccount/phones/{id}/challenge` endpoint more often than once every 30 seconds, or at a rate that exceeds the rate limit rule configured by the admin, returns a 429 (Too Many Requests) error.",
+          "parameters": []
+        },
+        "/idp/myaccount/phones/{id}/verify": {
+          "verb": "post",
+          "operation": "verifyPhoneChallenge",
+          "tags": [
+            "Phone"
+          ],
+          "description": "Verifies the phone number with the verification code that the user receives through `SMS` or `CALL`. The phone number is active upon a successful verification.\n\n> **Notes:**\n> * Sending requests to the `/idp/myaccount/phones/{id}/verify` endpoint at a rate that exceeds the rate limit rule configured by the admin returns a 429 (Too Many Requests) error.",
+          "parameters": []
+        },
+        "/idp/myaccount/profile": {
+          "verb": "put",
+          "operation": "replaceProfile",
+          "tags": [
+            "Profile"
+          ],
+          "description": "Replaces the caller's user profile\n\n> **Note:** This API differs from the the existing [Users API](https://developer.okta.com/docs/reference/api/users/) in that only the PUT operation is supported.  Partial updates (PATCH requests) aren't available. All values returned by fetching a user profile must pass to the MyAccount API, or the update doesn't pass validation. This applies even if the omitted schema property is optional. To ensure an optional property passes, enter a value of 'null'.",
+          "parameters": []
+        },
+        "/idp/myaccount/profile/schema": {
+          "verb": "get",
+          "operation": "getProfileSchema",
+          "tags": [
+            "Profile"
+          ],
+          "description": "Retrieves the appropriate user profile schema for the caller's [user type](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserType/)\n\n> **Note:** If a property's value isn't visible to an end user (because it's hidden or [sensitive](https://help.okta.com/okta_help.htm?id=ext-hide-sensitive-attributes)), then the property's definition is also hidden in the output of the MyAccount API.",
+          "parameters": []
+        },
+        "/idp/myaccount/sessions": {
+          "verb": "delete",
+          "operation": "deleteSessions",
+          "tags": [
+            "Sessions"
+          ],
+          "description": "Deletes all sessions. Revokes all active identity provider sessions of the user. This forces the user to authenticate on the next operation. Also revokes OpenID Connect and OAuth refresh and access tokens issued to the user.\n",
+          "parameters": []
+        }
+      }
+    }
+  }
+}

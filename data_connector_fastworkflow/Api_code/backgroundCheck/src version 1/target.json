@@ -1,0 +1,48 @@
+{
+  "objects": {
+    "order_confirmation": {
+      "methods": {
+        "/order_confirmation": {
+          "verb": "post",
+          "operation": "post__order_confirmation",
+          "tags": [
+            "Order Confirmation"
+          ],
+          "description": "Posts a background check request acknowledgment to SAP Fieldglass.",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": false,
+              "description": "Only required for production access when using SAP Fieldglass.",
+              "type": "string"
+            },
+            {
+              "name": "Content-Type",
+              "in": "header",
+              "required": false,
+              "type": "string",
+              "description": "JSON format is supported. This value is application/json."
+            },
+            {
+              "name": "X-ApplicationKey",
+              "in": "header",
+              "required": false,
+              "type": "string",
+              "description": "The company-specific key provided by SAP Fieldglass for API access."
+            },
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "The body of the request.",
+              "schema": {
+                "$ref": "#/definitions/OrderConfirmation"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
