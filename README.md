@@ -167,9 +167,31 @@ The FastWorkflow application follows a layered architecture:
 2. **Commands Layer**: Provides natural language interfaces to the application functionality
 3. **MCP Integration**: Connects to the MCP server to perform operations on OpenAPI specifications
 
-### Running the FastWorkflow
+### Setting Up and Running the FastWorkflow
 
-To run the FastWorkflow application, use the provided convenience script:
+#### 1. Train the FastWorkflow
+
+After cloning the repository and installing all dependencies from the requirements.txt, you must first train the FastWorkflow:
+
+```bash
+# If you're in the project root directory
+fastworkflow train ./data_connector_fastworkflow ./data_connector_fastworkflow/fastworkflow.env ./data_connector_fastworkflow/fastworkflow.passwords.env
+
+# If you're in another directory, use the absolute path
+fastworkflow train /path/to/iddm_dataconnector_codegen/data_connector_fastworkflow /path/to/iddm_dataconnector_codegen/data_connector_fastworkflow/fastworkflow.env /path/to/iddm_dataconnector_codegen/data_connector_fastworkflow/fastworkflow.passwords.env
+```
+
+#### 2. Make the Run Script Executable
+
+Before running the FastWorkflow application, make the convenience script executable:
+
+```bash
+chmod +x run_data_connector.sh
+```
+
+#### 3. Run the FastWorkflow
+
+Now you can run the FastWorkflow application using the provided convenience script:
 
 ```bash
 ./run_data_connector.sh
