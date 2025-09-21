@@ -1,0 +1,18 @@
+{
+  "name": "Harry Potter Open API Connector",
+  "description": "Connector for Harry Potter Open API (books and characters)",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "harry_potter_icon.png",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "api_base_url",
+      "description": "Base URL for the Harry Potter API",
+      "sectionName": "Connection",
+      "defaultValue": "https://api.example.com/harrypotter",
+      "dataType": "STRING",
+      "isRequired": true
+    }
+  ]
+}

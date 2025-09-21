@@ -1,0 +1,37 @@
+{
+  "name": "Backgroundcheck Unified Connector",
+  "description": "Connector for SAP Fieldglass background check objects (order_confirmation, result)",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "icons/backgroundcheck.png",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "hostname",
+      "description": "Hostname of the SAP Fieldglass API endpoint",
+      "sectionName": "Connection",
+      "defaultValue": "localhost",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^[a-zA-Z0-9.-]+$"
+    },
+    {
+      "name": "apiKey",
+      "description": "X-ApplicationKey provided by SAP Fieldglass",
+      "sectionName": "Connection",
+      "defaultValue": "",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^.+$"
+    },
+    {
+      "name": "authorizationToken",
+      "description": "Bearer token for production access (optional for test environments)",
+      "sectionName": "Connection",
+      "defaultValue": "",
+      "dataType": "STRING",
+      "isRequired": false,
+      "regex": "^.*$"
+    }
+  ]
+}

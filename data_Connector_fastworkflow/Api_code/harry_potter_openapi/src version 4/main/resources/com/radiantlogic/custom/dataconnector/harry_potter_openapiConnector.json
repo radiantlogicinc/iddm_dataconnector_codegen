@@ -1,0 +1,37 @@
+{
+  "name": "Harry Potter OpenAPI Connector",
+  "description": "Unified Data Connector for Harry Potter books, spells, and characters",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "path/to/harry_potter_icon.png",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "baseUrl",
+      "description": "Base URL for the Harry Potter API",
+      "sectionName": "Connection",
+      "defaultValue": "https://www.potterapi.com/v1",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^https?://[a-zA-Z0-9.-]+(:[0-9]+)?(/[^\\s]*)?$"
+    },
+    {
+      "name": "apiKey",
+      "description": "API key for accessing the Harry Potter API",
+      "sectionName": "Connection",
+      "defaultValue": "",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^[a-zA-Z0-9]+$"
+    },
+    {
+      "name": "timeout",
+      "description": "Connection timeout in milliseconds",
+      "sectionName": "Connection",
+      "defaultValue": "5000",
+      "dataType": "INTEGER",
+      "isRequired": false,
+      "regex": "^[0-9]+$"
+    }
+  ]
+}

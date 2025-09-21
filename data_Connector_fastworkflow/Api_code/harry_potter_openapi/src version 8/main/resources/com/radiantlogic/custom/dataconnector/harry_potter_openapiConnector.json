@@ -1,0 +1,37 @@
+{
+  "name": "Harry Potter OpenAPI Connector",
+  "description": "Unified Data Connector for Harry Potter OpenAPI – currently supports the books object.",
+  "backendCategory": "custom",
+  "userCreated": true,
+  "icon": "icons/harry_potter.png",
+  "isSchemaExtractable": false,
+  "meta": [
+    {
+      "name": "hostname",
+      "description": "Hostname of the Harry Potter OpenAPI service",
+      "sectionName": "Connection",
+      "defaultValue": "api.harrypotter.com",
+      "dataType": "STRING",
+      "isRequired": true,
+      "regex": "^[a-zA-Z0-9.-]+$"
+    },
+    {
+      "name": "port",
+      "description": "Port of the service",
+      "sectionName": "Connection",
+      "defaultValue": "443",
+      "dataType": "INTEGER",
+      "isRequired": true,
+      "regex": "^\\d{1,5}$"
+    },
+    {
+      "name": "apiKey",
+      "description": "API key for authentication",
+      "sectionName": "Authentication",
+      "defaultValue": "",
+      "dataType": "STRING",
+      "isRequired": false,
+      "regex": ".*"
+    }
+  ]
+}

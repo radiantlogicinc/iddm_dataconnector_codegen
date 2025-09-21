@@ -1,0 +1,24 @@
+{
+  "programs": {
+    "methods": {
+      "/programs": {
+        "verb": "post",
+        "operation": "post__programs",
+        "tags": [
+          "programs"
+        ],
+        "description": "Creates a single benefit program instance with the specified data. \n\nIn the request body, specify at least these required fields: url, startDate, endDate, description, title, urlAlias, and programPartner\n\n<b>Secured by:</b> Manage: Benefit Program Software Partner\n\n<b>Scope:</b> Benefits\n\nContains attachment(s)",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "benefitProgramsView",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/benefitProgramsView_0216b21ecae410002d4cc96bee440000"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,464 @@
+{
+  "objects": {
+    "v2": {
+      "methods": {
+        "/api/atlas/v2": {
+          "verb": "get",
+          "operation": "getSystemStatus",
+          "tags": [
+            "Root"
+          ],
+          "description": "This resource returns information about the MongoDB application along with API key meta data.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/pretty"
+            }
+          ]
+        }
+      }
+    },
+    "fieldNames": {
+      "methods": {
+        "/api/atlas/v2/alertConfigs/matchers/fieldNames": {
+          "verb": "get",
+          "operation": "listAlertConfigMatcherFieldNames",
+          "tags": [
+            "Alert Configurations"
+          ],
+          "description": "Get all field names that the `matchers.fieldName` parameter accepts when you create or update an Alert Configuration. You can successfully call this endpoint with any assigned role.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/pretty"
+            }
+          ]
+        }
+      }
+    },
+    "clusters": {
+      "methods": {
+        "/api/atlas/v2/clusters": {
+          "verb": "get",
+          "operation": "listClusterDetails",
+          "tags": [
+            "Clusters"
+          ],
+          "description": "Returns the details for all clusters in all projects to which you have access. Clusters contain a group of hosts that maintain the same data set. The response does not include multi-cloud clusters. To use this resource, the requesting Service Account or API Key can have any cluster-level role.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/includeCount"
+            },
+            {
+              "$ref": "#/components/parameters/itemsPerPage"
+            },
+            {
+              "$ref": "#/components/parameters/pageNum"
+            },
+            {
+              "$ref": "#/components/parameters/pretty"
+            }
+          ]
+        },
+        "/api/atlas/v2/groups/{groupId}/clusters": {
+          "verb": "post",
+          "operation": "createGroupCluster",
+          "tags": [
+            "Clusters"
+          ],
+          "description": "Creates one cluster in the specified project. Clusters contain a group of hosts that maintain the same data set. This resource can create clusters with asymmetrically-sized shards. Each project supports up to 25 database deployments. To use this resource, the requesting Service Account or API Key must have the Project Owner role. This feature is not available for serverless clusters.\n\nPlease note that using an instanceSize of M2 or M5 will create a Flex cluster instead. Support for the instanceSize of M2 or M5 will be discontinued in January 2026. We recommend using the createFlexCluster API for such configurations moving forward.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/groupId"
+            },
+            {
+              "$ref": "#/components/parameters/pretty"
+            }
+          ]
+        },
+        "/api/atlas/v2/groups/{groupId}/clusters/{clusterName}": {
+          "verb": "patch",
+          "operation": "updateGroupCluster",
+          "tags": [
+            "Clusters"
+          ],
+          "description": "Updates the details for one cluster in the specified project. Clusters contain a group of hosts that maintain the same data set. This resource can update clusters with asymmetrically-sized shards. To update a cluster's termination protection, the requesting Service Account or API Key must have the Project Owner role. For all other updates, the requesting Service Account or API Key must have the Project Cluster Manager role. You can't modify a paused cluster (`paused : true`). You must call this endpoint to set `paused : false`. After this endpoint responds with `paused : false`, you can call it again with the changes you want to make to the cluster. This feature is not available for serverless clusters.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/groupId"
+            },
+            {
+              "$ref": "#/components/parameters/pretty"
+            },
+            {
+              "description": "Human-readable label that identifies the cluster.",
+              "in": "path",
+              "name": "clusterName",
+              "required": true,
+              "schema": {
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*$",
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "/api/atlas/v2/groups/{groupId}/dbAccessHistory/clusters/{clusterName}": {
+          "verb": "get",
+          "operation": "getGroupDbAccessHistoryCluster",
+          "tags": [
+            "Access Tracking"
+          ],
+          "description": "Returns the access logs of one cluster identified by the cluster's name. Access logs contain a list of authentication requests made against your cluster. You can't use this feature on tenant-tier clusters (M0, M2, M5). To use this resource, the requesting Service Account or API Key must have the Project Monitoring Admin role or the Project Database Access Admin role.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/groupId"
+            },
+            {
+              "$ref": "#/components/parameters/pretty"
+            },
+            {
+              "description": "Flag that indicates whether the response returns the successful authentication attempts only.",
+              "in": "query",
+              "name": "authResult",
+              "schema": {
+                "type": "boolean"
+              }
+            },
+            {
+              "description": "Human-readable label that identifies the cluster.",
+              "in": "path",
+              "name": "clusterName",
+              "required": true,
+              "schema": {
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*$",
+                "type": "string"
+              }
+            },
+            {
+              "description": "Date and time when to stop retrieving database history. If you specify **end**, you must also specify **start**. This parameter uses UNIX epoch time in milliseconds.",
+              "in": "query",
+              "name": "end",
+              "schema": {
+                "format": "int64",
+                "type": "integer"
+              }
+            },
+            {
+              "description": "One Internet Protocol address that attempted to authenticate with the database.",
+              "in": "query",
+              "name": "ipAddress",
+              "schema": {
+                "pattern": "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)(\\.(?!$)|$)){4}|([0-9a-f]{1,4}:){7}[0-9a-f]{1,4}$",
+                "type": "string"
+              }
+            },
+            {
+              "description": "Maximum number of lines from the log to return.",
+              "in": "query",
+              "name": "nLogs",
+              "schema": {
+                "default": 20000,
+                "format": "int32",
+                "maximum": 20000,
+                "minimum": 0,
+                "type": "integer"
+              }
+            },
+            {
+              "description": "Date and time when MongoDB Cloud begins retrieving database history. If you specify **start**, you must also specify **end**. This parameter uses UNIX epoch time in milliseconds.",
+              "in": "query",
+              "name": "start",
+              "schema": {
+                "format": "int64",
+                "type": "integer"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "eventTypes": {
+      "methods": {
+        "/api/atlas/v2/eventTypes": {
+          "verb": "get",
+          "operation": "listEventTypes",
+          "tags": [
+            "Events"
+          ],
+          "description": "Returns a list of all event types, along with a description and additional metadata about each event.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/includeCount"
+            },
+            {
+              "$ref": "#/components/parameters/itemsPerPage"
+            },
+            {
+              "$ref": "#/components/parameters/pageNum"
+            },
+            {
+              "$ref": "#/components/parameters/pretty"
+            }
+          ]
+        }
+      }
+    },
+    "federationSettings": {
+      "methods": {
+        "/api/atlas/v2/federationSettings/{federationSettingsId}": {
+          "verb": "delete",
+          "operation": "deleteFederationSetting",
+          "tags": [
+            "Federated Authentication"
+          ],
+          "description": "Deletes the federation settings instance and all associated data, including identity providers and domains. To use this resource, the requesting Service Account or API Key must have the Organization Owner role in the last remaining connected organization. **Note**: requests to this resource will fail if there is more than one connected organization in the federation.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/federationSettingsId"
+            }
+          ]
+        },
+        "/api/atlas/v2/orgs/{orgId}/federationSettings": {
+          "verb": "get",
+          "operation": "getOrgFederationSettings",
+          "tags": [
+            "Federated Authentication"
+          ],
+          "description": "Returns information about the federation settings for the specified organization. To use this resource, the requesting Service Account or API Key must have the Organization Owner role in the connected org.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/orgId"
+            },
+            {
+              "$ref": "#/components/parameters/pretty"
+            }
+          ]
+        }
+      }
+    },
+    "connectedOrgConfigs": {
+      "methods": {
+        "/api/atlas/v2/federationSettings/{federationSettingsId}/connectedOrgConfigs": {
+          "verb": "get",
+          "operation": "listFederationSettingConnectedOrgConfigs",
+          "tags": [
+            "Federated Authentication"
+          ],
+          "description": "Returns all connected org configs in the specified federation. To use this resource, the requesting Service Account or API Key must have the Organization Owner role in one of the connected orgs.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/federationSettingsId"
+            },
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/itemsPerPage"
+            },
+            {
+              "$ref": "#/components/parameters/pageNum"
+            }
+          ]
+        },
+        "/api/atlas/v2/federationSettings/{federationSettingsId}/connectedOrgConfigs/{orgId}": {
+          "verb": "patch",
+          "operation": "updateFederationSettingConnectedOrgConfig",
+          "tags": [
+            "Federated Authentication"
+          ],
+          "description": "Updates one connected organization configuration from the specified federation. To use this resource, the requesting Service Account or API Key must have the Organization Owner role. \n\n**Note** If the organization configuration has no associated identity provider, you can't use this resource to update role mappings or post authorization role grants.  \n\n**Note**: The domainRestrictionEnabled field defaults to false if not provided in the request. \n\n**Note**: If the identityProviderId field is not provided, you will disconnect the organization and the identity provider. \n\n**Note**: Currently connected data access identity providers missing from the dataAccessIdentityProviderIds field will be disconnected.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/federationSettingsId"
+            },
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "description": "Unique 24-hexadecimal digit string that identifies the connected organization configuration to update.",
+              "in": "path",
+              "name": "orgId",
+              "required": true,
+              "schema": {
+                "example": "32b6e34b3d91647abb20e7b8",
+                "pattern": "^([a-f0-9]{24})$",
+                "type": "string"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "roleMappings": {
+      "methods": {
+        "/api/atlas/v2/federationSettings/{federationSettingsId}/connectedOrgConfigs/{orgId}/roleMappings": {
+          "verb": "post",
+          "operation": "createFederationSettingConnectedOrgConfigRoleMapping",
+          "tags": [
+            "Federated Authentication"
+          ],
+          "description": "Adds one role mapping to the specified organization in the specified federation. To use this resource, the requesting Service Account or API Key must have the Organization Owner role.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/federationSettingsId"
+            },
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/orgId"
+            }
+          ]
+        },
+        "/api/atlas/v2/federationSettings/{federationSettingsId}/connectedOrgConfigs/{orgId}/roleMappings/{id}": {
+          "verb": "put",
+          "operation": "updateFederationSettingConnectedOrgConfigRoleMapping",
+          "tags": [
+            "Federated Authentication"
+          ],
+          "description": "Updates one role mapping in the specified organization in the specified federation. To use this resource, the requesting Service Account or API Key must have the Organization Owner role.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/federationSettingsId"
+            },
+            {
+              "description": "Unique 24-hexadecimal digit string that identifies the role mapping that you want to update.",
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "example": "32b6e34b3d91647abb20e7b8",
+                "pattern": "^([a-f0-9]{24})$",
+                "type": "string"
+              }
+            },
+            {
+              "$ref": "#/components/parameters/envelope"
+            },
+            {
+              "$ref": "#/components/parameters/orgId"
+            }
+          ]
+        }
+      }
+    },
+    "identityProviders": {
+      "methods": {
+        "/api/atlas/v2/federationSettings/{federationSettingsId}/identityProviders": {
+          "verb": "post",
+          "operation": "createFederationSettingIdentityProvider",
+          "tags": [
+            "Federated Authentication"
+          ],
+          "description": "Creates one identity provider within the specified federation. To use this resource, the requesting Service Account or API Key must have the Organization Owner role in one of the connected organizations.\n\n**Note**: This resource only supports the creation of OIDC identity providers.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/federationSettingsId"
+            },
+            {
+              "$ref": "#/components/parameters/envelope"
+            }
+          ]
+        },
+        "/api/atlas/v2/federationSettings/{federationSettingsId}/identityProviders/{identityProviderId}": {
+          "verb": "patch",
+          "operation": "updateFederationSettingIdentityProvider",
+          "tags": [
+            "Federated Authentication"
+          ],
+          "description": "Updates one identity provider in the specified federation. To use this resource, the requesting Service Account or API Key must have the Organization Owner role in one of the connected organizations.\n\n**Note**: Changing authorization types and/or updating authorization claims can prevent current users and/or groups from accessing the database.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/federationSettingsId"
+            },
+            {
+              "description": "Unique string that identifies the identity provider to connect. If using an API version before 11-15-2023, use the legacy 20-hexadecimal digit id. This id can be found within the Federation Management Console > Identity Providers tab by clicking the info icon in the IdP ID row of a configured identity provider. For all other versions, use the 24-hexadecimal digit id.",
+              "in": "path",
+              "name": "identityProviderId",
+              "required": true,
+              "schema": {
+                "example": "32b6e34b3d91647abb20e7b8",
+                "type": "string"
+              }
+            },
+            {
+              "$ref": "#/components/parameters/envelope"
+            }
+          ]
+        }
+      }
+    },
+    "jwks": {
+      "methods": {
+        "/api/atlas/v2/federationSettings/{federationSettingsId}/identityProviders/{identityProviderId}/jwks": {
+          "verb": "delete",
+          "operation": "revokeFederationSettingIdentityProviderJwks",
+          "tags": [
+            "Federated Authentication"
+          ],
+          "description": "Revokes the JWKS tokens from the requested OIDC identity provider. To use this resource, the requesting Service Account or API Key must have the Organization Owner role in one of the connected organizations. \n\n**Note**: Revoking your JWKS tokens immediately refreshes your IdP public keys from all your Atlas clusters, invalidating previously signed access tokens and logging out all users. You may need to restart your MongoDB clients. All organizations connected to the identity provider will be affected.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/federationSettingsId"
+            },
+            {
+              "description": "Unique 24-hexadecimal digit string that identifies the identity provider to connect.",
+              "in": "path",
+              "name": "identityProviderId",
+              "required": true,
+              "schema": {
+                "example": "32b6e34b3d91647abb20e7b8",
+                "type": "string"
+              }
+            },
+            {
+              "$ref": "#/components/parameters/envelope"
+            }
+          ]
+        }
+      }
+    },
+    "metadata.xml": {
+      "methods": {
+        "/api/atlas/v2/federationSettings/{federationSettingsId}/identityProviders/{identityProviderId}/metadata.xml": {
+          "verb": "get",
+          "operation": "getFederationSettingIdentityProviderMetadata",
+          "tags": [
+            "Federated Authentication"
+          ],
+          "description": "Returns the metadata of one identity provider in the specified federation. To use this resource, the requesting Service Account or API Key must have the Organization Owner role in one of the connected organizations.",
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/federationSettingsId"
+            },
+            {
+              "$ref": "#/components/parameters/identityProviderId"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

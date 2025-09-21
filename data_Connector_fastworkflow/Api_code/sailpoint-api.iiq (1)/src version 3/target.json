@@ -1,0 +1,749 @@
+{
+  "objects": {
+    "Accounts": {
+      "methods": {
+        "/Accounts": {
+          "verb": "post",
+          "operation": "createAccount",
+          "tags": [
+            "Accounts"
+          ],
+          "description": "The endpoint used to create an Account resource. The required payload fields can differ drastically depending on the Application.",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "displayName,active"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "displayName,active"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. *Some attributes cannot be excluded.*"
+            }
+          ]
+        },
+        "/Accounts/{accountId}": {
+          "verb": "delete",
+          "operation": "deleteAccount",
+          "tags": [
+            "Accounts"
+          ],
+          "description": "The endpoint used to delete an Account resource. **This is not reversible.**",
+          "parameters": [
+            {
+              "name": "accountId",
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "c7c7777c7ef77e77777ee77e7a1f0444"
+              },
+              "description": "The id of the Account.",
+              "required": true
+            }
+          ]
+        }
+      }
+    },
+    "Alerts": {
+      "methods": {
+        "/Alerts": {
+          "verb": "post",
+          "operation": "createAlert",
+          "tags": [
+            "Alerts"
+          ],
+          "description": "The endpoint used to create an Alert resource.",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "name"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "name, application"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. **Some attributes cannot be excluded.**"
+            }
+          ]
+        },
+        "/Alerts/{alertId}": {
+          "verb": "get",
+          "operation": "getAlertById",
+          "tags": [
+            "Alerts"
+          ],
+          "description": ">The Alert resource with matching id is returned.<br /><br />\n>Attributes to include in the response can be specified with the attributes query parameter. <br /><br /> \n>Attributes to exclude from the response can be specified with the excludedAttributes query parameter. <br /><br />\n",
+          "parameters": [
+            {
+              "name": "alertId",
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "c0a8019c802d1e5a81802eb2b57e020f"
+              },
+              "description": "id of Alert resource.",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "name"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "name, application"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. **Some attributes cannot be excluded.**"
+            }
+          ]
+        }
+      }
+    },
+    "Applications": {
+      "methods": {
+        "/Applications": {
+          "verb": "get",
+          "operation": "getApplications",
+          "tags": [
+            "Applications"
+          ],
+          "description": "This endpoint returns all Application resources. <br /><br />\nAttributes to include in the response can be specified with the 'attributes' query parameter. <br /><br /> \nAttributes to exclude from the response can be specified with the 'excludedAttributes' query parameter. <br /><br />\nThe schema related to Applications is: \n- **urn:ietf:params:scim:schemas:core:1.0:Application**\n",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "filter",
+              "schema": {
+                "type": "string",
+                "example": "type eq \"Active Directory - Direct\""
+              },
+              "description": "Allows for query filters according to RFC-7644, Section 3.4.2.2 - not all operations are supported."
+            },
+            {
+              "in": "query",
+              "name": "lookupByName",
+              "schema": {
+                "type": "boolean",
+                "default": false,
+                "example": true
+              }
+            },
+            {
+              "in": "query",
+              "name": "sortBy",
+              "schema": {
+                "type": "string",
+                "example": "name"
+              },
+              "description": "Allows sorting the results by a resource's attributes."
+            },
+            {
+              "in": "query",
+              "name": "sortOrder",
+              "schema": {
+                "type": "string",
+                "default": "ascending",
+                "example": "descending"
+              },
+              "description": "Determines what order to sort results in."
+            },
+            {
+              "in": "query",
+              "name": "startIndex",
+              "schema": {
+                "type": "integer",
+                "example": 10,
+                "default": 1
+              },
+              "description": "Determines the starting index of the result set."
+            },
+            {
+              "in": "query",
+              "name": "count",
+              "schema": {
+                "type": "integer",
+                "example": 10,
+                "default": 1
+              },
+              "description": "Specifies the number of results per page."
+            },
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "name,type,features"
+              },
+              "description": "The Application attributes to include in the response. The query parameter value is a comma-separated list of fields to be returned in the response for each Application. The attributes listed will be the only ones returned in the response, with the exception of id, schemas, and meta, which are always returned for an Application."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "features"
+              },
+              "description": "The Application attributes to exclude frome the response. The query parameter value is a comma-separated list of fields to be excluded from the response for each Application. The attributes listed will be the only ones excluded frome the response, with the exception of id, schemas, and meta, which are always returned for an Application."
+            }
+          ]
+        },
+        "/Applications/{applicationId}": {
+          "verb": "get",
+          "operation": "getApplication",
+          "tags": [
+            "Applications"
+          ],
+          "description": "The Application resource with matching id or name is returned. Attributes to include in the response can be specified with the 'attributes' query parameter. \nAttributes to exclude from the response can be specified with the 'excludedAttributes' query parameter. \nThe schema related to Application is: \n- **urn:ietf:params:scim:schemas:sailpoint:1.0:Application.**\n",
+          "parameters": [
+            {
+              "name": "applicationId",
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "7f00000180281df7818028bfaae8035b"
+              },
+              "description": "id or name of Application resource.",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "name,type,features"
+              },
+              "description": "The Application attributes to include in the response. The query parameter value is a comma-separated list of fields to be returned in the response for each Application. The attributes listed will be the only ones returned in the response, with the exception of id, schemas, and meta, which are always returned for an Application."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "features"
+              },
+              "description": "The Application attributes to exclude frome the response. The query parameter value is a comma-separated list of fields to be excluded from the response for each Application. The attributes listed will be the only ones excluded frome the response, with the exception of id, schemas, and meta, which are always returned for an Application."
+            }
+          ]
+        }
+      }
+    },
+    "CheckedPolicyViolations": {
+      "methods": {
+        "/CheckedPolicyViolations": {
+          "verb": "post",
+          "operation": "checkPolicyViolations",
+          "tags": [
+            "Checked Policy Violations"
+          ],
+          "description": ">This submits a set of access items to request and a set of policies to check after the access provisioning is simulated in order to determine if policy violations would be created by provisioning the access items. It receives a payload that includes:  \n\n>**An identity:** Used as the recipient for the access items on the simulation. \n\n>**A provisioning plan:** To specify the changes to be simulatedly provisioned in the provided identity  \n\n>**A list of policies:** to check after the simulation of provisioning plan was applied to the identity in order to determine if the access granted in the simulation causes new policy violations. \n\n>Optionally you can pass a list of attributes, as query params, to be included or excluded from the response, this setting is applicable only to top level attributes as defined in the schema ***urn:ietf:params:scim:schemas:sailpoint:1.0:CheckedPolicyViolation.***  \n\n>**Valid values**: \n**- policies**\n **- identity**\n **- plan**\n **- violations**\n **- leftBundles**\n **- rightBundles** \n",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string"
+              },
+              "description": "A list of attributes to indicate what top level attributes to include in the response"
+            },
+            {
+              "in": "query",
+              "name": "authnPassword",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Password for authentication"
+            },
+            {
+              "in": "query",
+              "name": "authnUsername",
+              "schema": {
+                "type": "string"
+              },
+              "description": "Username for authentication"
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string"
+              },
+              "description": "A list of attributes to indicate what top level attributes to exclude from the response"
+            },
+            {
+              "in": "query",
+              "name": "lookupByName",
+              "schema": {
+                "type": "boolean"
+              },
+              "description": "This is not required in this endpoint, the returned object is a new PolicyViolation and not one returned from the persistence layer. This is inherited from the BaseSCIMResource and is used to override the default id based lookup, and use a name based lookup instead, if for any reason the artifact id is not present.",
+              "example": false
+            }
+          ]
+        }
+      }
+    },
+    "Entitlements": {
+      "methods": {
+        "/Entitlements": {
+          "verb": "get",
+          "operation": "getEntitlements",
+          "tags": [
+            "Entitlements"
+          ],
+          "description": "This endpoint returns all Entitlement resources. <br /><br />\nAttributes to include in the response can be specified with the 'attributes' query parameter. <br /><br />\nAttributes to exclude from the response can be specified with the 'excludedAttributes' query parameter. <br /><br />\nThe schemas related to Entitlements are:\n- **urn:ietf:params:scim:schemas:sailpoint:1.0:Entitlement**\n",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "filter",
+              "schema": {
+                "type": "string",
+                "example": "displayableName eq \"accessLog\""
+              },
+              "description": "Allows for query filters according to RFC-7644, Section 3.4.2.2 - not all operations are supported."
+            },
+            {
+              "in": "query",
+              "name": "sortBy",
+              "schema": {
+                "type": "string",
+                "example": "application"
+              },
+              "description": "Allows sorting the results by a resource's attributes."
+            },
+            {
+              "in": "query",
+              "name": "sortOrder",
+              "schema": {
+                "type": "string",
+                "default": "ascending",
+                "example": "descending"
+              },
+              "description": "Determines what order to sort results in."
+            },
+            {
+              "in": "query",
+              "name": "startIndex",
+              "schema": {
+                "type": "integer",
+                "example": 10,
+                "default": 1
+              },
+              "description": "Determines the starting index of the result set."
+            },
+            {
+              "in": "query",
+              "name": "count",
+              "schema": {
+                "type": "integer",
+                "example": 10,
+                "default": 1000
+              },
+              "description": "Specifies the number of results per page."
+            },
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "application"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "application"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. **Some attributes cannot be excluded.**"
+            }
+          ]
+        },
+        "/Entitlements/{entitlementId}": {
+          "verb": "get",
+          "operation": "getEntitlementById",
+          "tags": [
+            "Entitlements"
+          ],
+          "description": "The Entitlement resource with matching id is returned.<br /><br />\nAttributes to include in the response can be specified with the attributes query parameter. <br /><br />\nAttributes to exclude from the response can be specified with the excludedAttributes query parameter. <br /><br />\n",
+          "parameters": [
+            {
+              "name": "entitlementId",
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "c0a8019c802d1e5a81802eb2b57e020f"
+              },
+              "description": "id of Entitlement resource.",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "application"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "name, application"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. **Some attributes cannot be excluded.**"
+            }
+          ]
+        }
+      }
+    },
+    "LaunchedWorkflows": {
+      "methods": {
+        "/LaunchedWorkflows": {
+          "verb": "post",
+          "operation": "launchWorkflow",
+          "tags": [
+            "LaunchedWorkflows"
+          ],
+          "description": "Endpoint to launch or execute a Workflow. A payload for the request is required and this can include inputs specific to the Workflow being launched.",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "input"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "workflowName"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. *Some attributes cannot be excluded.*"
+            }
+          ]
+        }
+      }
+    },
+    "LaunchedWorkflow": {
+      "methods": {
+        "/LaunchedWorkflow/{launchedWorkflowId}": {
+          "verb": "get",
+          "operation": "getLaunchedWorkflowById",
+          "tags": [
+            "LaunchedWorkflows"
+          ],
+          "description": "The LaunchedWorkflow resource with matching id is returned.<br /><br />\nAttributes to include in the response can be specified with the attributes query parameter. <br /><br /> \nAttributes to exclude from the response can be specified with the excludedAttributes query parameter. <br /><br />\n\nThe schema related to LaunchedWorkflow is: \n- **urn:ietf:params:scim:schemas:sailpoint:1.0:LaunchedWorkflow**\n",
+          "parameters": [
+            {
+              "name": "launchedWorkflowId",
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "c0a8019c802d1e5a81802eb2b57e020f"
+              },
+              "description": "id of LaunchedWorkflow resource.",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "expiration"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "names"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. **Some attributes cannot be excluded.**"
+            }
+          ]
+        }
+      }
+    },
+    "ObjectConfigs": {
+      "methods": {
+        "/ObjectConfigs": {
+          "verb": "get",
+          "operation": "getObjectConfigs",
+          "tags": [
+            "ObjectConfig"
+          ],
+          "description": "This endpoint returns all ObjectConfig resources. <br/>\n\nAttributes to include in the response can be specified with the attributes query parameter. <br/> \n\nAttributes to exclude from the response can be specified with the excludedAttributes query parameter. <br/>\n\nThe schema related to ObjectConfig is: \n- **urn:ietf:params:scim:schemas:sailpoint:1.0:ObjectConfig**.\n",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "filter",
+              "schema": {
+                "type": "string",
+                "example": "name eq \"identity\""
+              },
+              "description": "Allows for query filters according to RFC-7644, Section 3.4.2.2 - not all operations are supported."
+            },
+            {
+              "in": "query",
+              "name": "lookupByName",
+              "schema": {
+                "type": "boolean",
+                "default": false,
+                "example": true
+              },
+              "description": "(OPTIONAL) Set to true if the ObjectConfig name is passed instead of the ObjectConfig id."
+            },
+            {
+              "in": "query",
+              "name": "sortBy",
+              "schema": {
+                "type": "string",
+                "example": "name"
+              },
+              "description": "Allows sorting the results by a resource's attributes."
+            },
+            {
+              "in": "query",
+              "name": "sortOrder",
+              "schema": {
+                "type": "string",
+                "default": "ascending"
+              },
+              "example": "descending",
+              "description": "Determines what order to sort results in."
+            },
+            {
+              "in": "query",
+              "name": "startIndex",
+              "schema": {
+                "type": "integer",
+                "example": 10,
+                "default": 1
+              },
+              "description": "Determines the starting index of the result set."
+            },
+            {
+              "in": "query",
+              "name": "count",
+              "schema": {
+                "type": "integer",
+                "example": 10,
+                "default": 1000
+              },
+              "description": "Specifies the number of results per page."
+            },
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "name"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "name, objectAttributes"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. **Some attributes cannot be excluded.**"
+            }
+          ]
+        }
+      }
+    },
+    "ObjectConfig": {
+      "methods": {
+        "/ObjectConfig/{objectConfigId}": {
+          "verb": "get",
+          "operation": "getObjectConfigById",
+          "tags": [
+            "ObjectConfig"
+          ],
+          "description": "The ObjectConfig resource with matching name or id is returned. <br/>\n\nAttributes to include in the response can be specified with the 'attributes' query parameter. <br/>\n\nAttributes to exclude from the response can be specified with the 'excludedAttributes' query parameter.\n\nThe schema related to ObjectConfig is:\n- **urn:ietf:params:scim:schemas:sailpoint:1.0:ObjectConfig**\n",
+          "parameters": [
+            {
+              "name": "objectConfigId",
+              "in": "path",
+              "schema": {
+                "type": "string",
+                "example": "7f00000180281df7818028be62e500e8"
+              },
+              "description": "id of ObjectConfig resource.",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "objectAttributes"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "name"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. **Some attributes cannot be excluded.**"
+            }
+          ]
+        }
+      }
+    },
+    "PolicyViolations": {
+      "methods": {
+        "/PolicyViolations": {
+          "verb": "get",
+          "operation": "getPolicyViolations",
+          "tags": [
+            "PolicyViolations"
+          ],
+          "description": "This endpoint returns all PolicyViolation resources.",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "filter",
+              "schema": {
+                "type": "string",
+                "example": "constraintName eq \"Mock Constraint\""
+              },
+              "description": "Allows for query filters according to RFC-7644, Section 3.4.2.2 - not all operations are supported."
+            },
+            {
+              "in": "query",
+              "name": "sortBy",
+              "schema": {
+                "type": "string",
+                "example": "constraintName"
+              },
+              "description": "Allows sorting the results by a resource's attributes."
+            },
+            {
+              "in": "query",
+              "name": "sortOrder",
+              "schema": {
+                "type": "string",
+                "example": "descending",
+                "default": "ascending"
+              },
+              "description": "Determines what order to sort results in."
+            },
+            {
+              "in": "query",
+              "name": "startIndex",
+              "schema": {
+                "type": "integer",
+                "example": 2313,
+                "default": 1
+              },
+              "description": "Determines the starting index of the result set."
+            },
+            {
+              "in": "query",
+              "name": "count",
+              "schema": {
+                "type": "integer",
+                "example": 10,
+                "default": 1000
+              },
+              "description": "Specifies the number of results per page."
+            },
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "policyName,constraintName"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "policyName,constraintName"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. *Some attributes cannot be excluded.*"
+            }
+          ]
+        },
+        "/PolicyViolations/{policyViolationId}": {
+          "verb": "get",
+          "operation": "getPolicyViolationById",
+          "tags": [
+            "PolicyViolations"
+          ],
+          "description": "The PolicyViolation resource with matching id is returned.",
+          "parameters": [
+            {
+              "name": "policyViolationId",
+              "in": "path",
+              "schema": {
+                "type": "string"
+              },
+              "description": "The id of the PolicyViolation.",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "attributes",
+              "schema": {
+                "type": "string",
+                "example": "policyName,constraintName"
+              },
+              "description": "A comma-separated list of attributes to return in the response. This query parameter supersedes excludedAttributes, so providing the same attribute(s) to both will result in the attribute(s) being returned."
+            },
+            {
+              "in": "query",
+              "name": "excludedAttributes",
+              "schema": {
+                "type": "string",
+                "example": "policyName,constraintName"
+              },
+              "description": "A comma-separated list of attributes to exclude from the response. *Some attributes cannot be excluded.*"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
