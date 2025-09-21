@@ -206,17 +206,6 @@ Once the FastWorkflow application is running, you can interact with it using nat
    zip the latest code
    ```
 
-### Configuration
-
-You can configure the environment variables in `dataconnector.env`:
-
-```
-# Data Connector paths
-API_SPEC_PATH=/path/to/api-spec.yaml
-JAVA_CLIENT_API_DIR=/path/to/java_client/api  # Optional
-JAVA_CLIENT_MODEL_DIR=/path/to/java_client/model  # Optional
-```
-
 And add your API keys to `fastworkflow.passwords.env`:
 
 ```
