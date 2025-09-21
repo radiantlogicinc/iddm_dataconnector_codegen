@@ -169,6 +169,29 @@ The FastWorkflow application follows a layered architecture:
 
 ### Setting Up and Running the FastWorkflow
 
+0. Initial Setup
+
+First, clone the repository, create a Python virtual environment, and install all dependencies:
+
+git clone https://github.com/your-org/iddm_dataconnector_codegen.git
+cd iddm_dataconnector_codegen
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate   # On Windows use: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+
+Next, add your API key values to fastworkflow.passwords.env before using FastWorkflow:
+
+# LLM API Keys
+LITELLM_API_KEY_SYNDATA_GEN=your-api-key-here
+LITELLM_API_KEY_PARAM_EXTRACTION=your-api-key-here
+LITELLM_API_KEY_RESPONSE_GEN=your-api-key-here
+LITELLM_API_KEY_AGENT=your-api-key-here
+
 #### 1. Train the FastWorkflow
 
 After cloning the repository and installing all dependencies from the requirements.txt, you must first train the FastWorkflow:
