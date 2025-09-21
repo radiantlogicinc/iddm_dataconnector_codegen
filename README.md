@@ -10,6 +10,7 @@ An AI-powered application for rapid development of IDDM data connectors, enhance
 - **Data Connector Templates**: Pre-built templates and examples for common connector patterns
 - **Few-Shot Learning**: AI-powered code generation using example-based learning
 - **Maven Integration**: Complete Maven project structure with automated builds
+- **FastWorkflow Interface**: Natural language interface for generating data connectors from OpenAPI specifications
 
 ## 📁 Project Structure
 
@@ -32,6 +33,26 @@ iddm_dataconnector_codegen/
 ├── java_client/                 # Generated Java client code
 │   ├── harrypotterapi/
 │   └── myaccountmanagement/
+├── data_connector_fastworkflow/ # FastWorkflow application for data connector generation
+│   ├── application/            # Application layer with core business logic
+│   │   ├── __init__.py
+│   │   ├── data_connector.py   # Main application class using MCP server functions
+│   │   ├── enhanced_mcp_server.py # Enhanced MCP server functionality
+│   │   └── mcp_server.py       # Base MCP server functionality
+│   ├── _commands/              # Commands layer for natural language interface
+│   │   ├── __init__.py
+│   │   ├── initialize_data_connector.py # Command to initialize with API spec path
+│   │   ├── context_inheritance_model.json # Context hierarchy definition
+│   │   └── DataConnector/      # DataConnector-specific commands
+│   │       ├── __init__.py
+│   │       ├── _DataConnector.py # Context navigation class
+│   │       ├── list_objects.py # Command to list objects from source JSON
+│   │       ├── select_object.py # Command to select objects for target JSON
+│   │       ├── generate_code.py # Command to generate data connector code
+│   │       └── zip_code.py     # Command to zip the latest generated code
+│   ├── fastworkflow.env        # Environment variables with LLM settings
+│   ├── fastworkflow.passwords.env # API keys for LLMs
+│   └── startup_action.json     # Empty startup action (initialization requires parameters)
 ├── pom.xml                      # Maven project configuration
 ├── requirements.txt             # Project-level extras (optional)
 └── debug_generation.log         # Tooling logs (if present)
@@ -134,6 +155,112 @@ mvn package -DskipTests
 - **OpenAPI Operations**: initialize specs, list objects/methods, select targets
 - **Data Connector Operations**: generate Java client code, generate connector code, compile/test with Maven
 
+## 📱 Data Connector FastWorkflow
+
+The Data Connector FastWorkflow provides a natural language interface for generating data connectors from OpenAPI specifications. It leverages the MCP server functionality for a more user-friendly experience.
+
+### Architecture
+
+The FastWorkflow application follows a layered architecture:
+
+1. **Application Layer**: Contains the core business logic in the `DataConnector` class
+2. **Commands Layer**: Provides natural language interfaces to the application functionality
+3. **MCP Integration**: Connects to the MCP server to perform operations on OpenAPI specifications
+
+### Running the FastWorkflow
+
+To run the FastWorkflow application, use the provided convenience script:
+
+```bash
+./run_data_connector.sh
+```
+
+This script runs the FastWorkflow application with the appropriate environment and password files.
+
+### Usage
+
+Once the FastWorkflow application is running, you can interact with it using natural language commands:
+
+1. **Initialize the data connector**:
+   ```
+   initialize data connector with api spec path /path/to/api-spec.yaml
+   ```
+
+2. **List objects from source JSON**:
+   ```
+   list all objects in source json
+   ```
+
+3. **Select objects for target JSON**:
+   ```
+   select the users, products and orders object for target
+   ```
+
+4. **Generate data connector code**:
+   ```
+   generate data connector code
+   ```
+
+5. **Zip the latest code**:
+   ```
+   zip the latest code
+   ```
+
+### Configuration
+
+You can configure the environment variables in `dataconnector.env`:
+
+```
+# Data Connector paths
+API_SPEC_PATH=/path/to/api-spec.yaml
+JAVA_CLIENT_API_DIR=/path/to/java_client/api  # Optional
+JAVA_CLIENT_MODEL_DIR=/path/to/java_client/model  # Optional
+```
+
+And add your API keys to `fastworkflow.passwords.env`:
+
+```
+# LLM API Keys
+LITELLM_API_KEY_SYNDATA_GEN=your-api-key-here
+LITELLM_API_KEY_PARAM_EXTRACTION=your-api-key-here
+LITELLM_API_KEY_RESPONSE_GEN=your-api-key-here
+LITELLM_API_KEY_AGENT=your-api-key-here
+```
+
+### Output Structure
+
+When generating code, the application creates a structured output directory:
+
+```
+Api_code/
+└── {api_name}/
+    ├── source.json                # Parsed OpenAPI spec
+    ├── target.json                # Selected objects
+    ├── src version {version}/     # Generated code
+    │   ├── main/
+    │   │   ├── java/
+    │   │   │   └── com/
+    │   │   │       └── radiantlogic/
+    │   │   │           └── custom/
+    │   │   │               └── dataconnector/
+    │   │   │                   └── {ApiName}DataConnector.java
+    │   │   └── resources/
+    │   │       └── com/
+    │   │           └── radiantlogic/
+    │   │               └── custom/
+    │   │                   └── dataconnector/
+    │   │                       └── {api_name}Connector.json
+    │   └── test/
+    │       └── java/
+    │           └── com/
+    │               └── radiantlogic/
+    │                   └── custom/
+    │                       └── dataconnector/
+    │                           └── {ApiName}DataConnectorTest.java
+    └── zip/                      # Zipped code archives
+        └── src_version_{version}.zip
+```
+
 ## ⚠️ Important Notes
 
 - **File Deletion Limitation**: if generated files need to be cleared, remove them manually:
@@ -149,6 +276,8 @@ mvn package -DskipTests
 - OpenAPI specs live under `yamlfiles/`. Point the MCP tools at these when initializing.
 - The `src/main/java/com/radiantlogic/custom/dataconnector/` directory will be empty until you generate code.
 - Check `debug_generation.log` and `select_object_debug.log` (if present) for troubleshooting information.
+- When using the FastWorkflow interface, you can select multiple objects before generating code.
+- The FastWorkflow application maintains state between commands, so you don't need to re-initialize for each operation.
 
 ## 📚 Examples Folder
 
@@ -177,6 +306,7 @@ This project combines:
 - **DSPy**: AI-powered code generation and optimization
 - **OpenAPI**: Standard API specification processing
 - **Maven**: Java project management and build automation
+- **FastWorkflow**: Natural language interface for data connector generation
 
 ## 🤝 Contributing
 
